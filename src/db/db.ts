@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import * as path from 'path';
 import 'reflect-metadata';
 
 import Member from '../data/Member.entity';
@@ -13,15 +12,7 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.PGPORT),
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
-  entities: [
-    path.join(
-      __dirname,
-      '..',
-      'data',
-      '*.entity.ts',
-      path.join(__dirname, '..', 'data', '*.entity.js'),
-    ),
-  ],
+  entities: [Member, Question, Answer],
   synchronize: true,
   logging: ['query', 'warn', 'error'],
 });
