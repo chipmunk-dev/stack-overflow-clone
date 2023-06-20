@@ -30,7 +30,7 @@ export default class Member {
   @OneToMany(() => Question, (question) => question.member)
   questions!: Question[];
 
-  @OneToMany(() => Answer, (answer) => answer.memberId)
+  @OneToMany(() => Answer, (answer) => answer.member)
   answers!: Answer[];
 
   @CreateDateColumn()

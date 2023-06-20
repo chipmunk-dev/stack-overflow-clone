@@ -9,6 +9,7 @@ import { AppDataSource } from './db/db';
 import authRouter from './router/auth.route';
 import memberRouter from './router/member.route';
 import questionRouter from './router/question.route';
+import answerRouter from './router/answer.route';
 
 import 'reflect-metadata';
 
@@ -32,6 +33,7 @@ app.use(morgan(process.env.MOARGAN as string));
 app.use('/auth', authRouter);
 app.use('/members', memberRouter);
 app.use('/questions', questionRouter);
+app.use('/answers', answerRouter);
 app.use(
   (
     error: any,

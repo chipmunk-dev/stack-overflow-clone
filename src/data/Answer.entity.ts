@@ -13,7 +13,7 @@ import Question from './Question.entity';
 @Entity('answers')
 export default class Answer {
   @PrimaryGeneratedColumn('increment')
-  answerid!: number;
+  answerId!: number;
 
   @Column({ type: 'varchar', length: 5000 })
   content!: string;
@@ -23,14 +23,14 @@ export default class Answer {
     name: 'memberId',
     referencedColumnName: 'memberId',
   })
-  memberId!: number;
+  member!: Member;
 
   @ManyToOne(() => Question, (question) => question.answers)
   @JoinColumn({
     name: 'questionId',
     referencedColumnName: 'questionId',
   })
-  questionId!: number;
+  question!: Question;
 
   @CreateDateColumn()
   createdAt!: Date;
