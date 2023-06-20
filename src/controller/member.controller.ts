@@ -33,9 +33,11 @@ export const register = async (request: Request, response: Response) => {
       process.env.REFRESH_KEY as string,
     );
 
+    response.cookie('authorization', `Bearer ${accessToken}`);
+
     return response
       .status(201)
-      .json({ member: responseMemberData, accessToken, refreshToken });
+      .json({ member: responseMemberData, refreshToken });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
@@ -77,9 +79,11 @@ export const login = async (request: Request, response: Response) => {
       process.env.REFRESH_KEY as string,
     );
 
+    response.cookie('authorization', `Bearer ${accessToken}`);
+
     return response
       .status(200)
-      .json({ member: responseMemberData, accessToken, refreshToken });
+      .json({ member: responseMemberData, refreshToken });
   } catch (error) {
     console.error(error);
     return response.status(500).json({

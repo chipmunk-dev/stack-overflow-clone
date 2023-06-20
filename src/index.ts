@@ -2,12 +2,14 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 import * as dotenv from 'dotenv';
 import * as cors from 'cors';
+import * as cookieParser from 'cookie-parser';
 import { CorsOptions } from 'cors';
 import helmet from 'helmet';
 
 import { AppDataSource } from './db/db';
 import authRouter from './router/auth.route';
 import memberRouter from './router/member.route';
+import questionRouter from './router/question.route';
 
 import 'reflect-metadata';
 
@@ -27,9 +29,11 @@ app.use(express.json());
 app.use(cors(corsOption));
 app.use(helmet());
 app.use(morgan(process.env.MOARGAN as string));
+app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/members', memberRouter);
+app.use('/questions', questionRouter);
 app.use(
   (
     error: any,
