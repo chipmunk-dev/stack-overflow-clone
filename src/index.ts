@@ -30,11 +30,10 @@ app.use(express.json());
 app.use(cors(corsOption));
 app.use(morgan(process.env.MOARGAN as string));
 
-app.use('/');
 app.get('/', async (req, res) => {
   return res.status(200).json({ success: true });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`STACK OVER FLOW SERVER STARTED... PORT: ` + port);
 });
