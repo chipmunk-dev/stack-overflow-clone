@@ -1,23 +1,20 @@
-import express from 'express';
-import cors, { CorsOptions } from 'cors';
-import morgan from 'morgan';
-import pg from 'pg';
-import dotenv from 'dotenv';
+import * as express from 'express';
+import * as morgan from 'morgan';
+import * as dotenv from 'dotenv';
+import * as cors from 'cors';
+import { CorsOptions } from 'cors';
+import helmet from 'helmet';
+
+import { AppDataSource } from './db/db';
+import authRouter from './router/auth.route';
+import memberRouter from './router/member.route';
+
+import 'reflect-metadata';
 
 dotenv.config();
 
-// Connect to the database using the DATABASE_URL environment
-//   variable injected by Railway
-const pool = new pg.Pool({
-  database: process.env.PGDATABASE,
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-});
-
 const corsOption: CorsOptions = {
-  origin: ['http://localhost:5173'],
+  origin: [process.env.ORIGIN as string],
   methods: ['GET', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -28,12 +25,41 @@ const port = process.env.PORT || 3333;
 
 app.use(express.json());
 app.use(cors(corsOption));
+app.use(helmet());
 app.use(morgan(process.env.MOARGAN as string));
 
-app.get('/', async (req, res) => {
-  return res.status(200).json({ success: true });
-});
+app.use('/auth', authRouter);
+app.use('/members', memberRouter);
+app.use(
+  (
+    error: any,
+    _request: express.Request,
+    response: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    console.error(error);
 
-app.listen(port, () => {
-  console.log(`STACK OVER FLOW SERVER STARTED... PORT: ` + port);
-});
+    return response.status(500).json({
+      message: '서버에러가 발생했습니다. 잠시후 다시 시도해주세요.',
+      error,
+    });
+  },
+);
+
+const initializeApp = async () => {
+  try {
+    await AppDataSource.initialize();
+    app.listen(port, () => {
+      console.log('connect database...');
+      console.log('connect redis server...');
+      console.log(`connect server at port number ${port}...`);
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Server Error');
+  }
+};
+
+initializeApp();
+
+export default app;

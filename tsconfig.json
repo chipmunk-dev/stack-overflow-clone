@@ -1,13 +1,35 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-
-    "incremental": true,
-    "target": "es6",
-    "module": "commonjs",
+    "lib": ["es2017"],
+    "target": "es2016",
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "declaration": true,
+    "esModuleInterop": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "src/**/*.test.ts",
+    "./coverage",
+    "./dist",
+    "__tests__",
+    "jest.config"
+  ]
 }
