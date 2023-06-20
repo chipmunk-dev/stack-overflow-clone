@@ -13,7 +13,15 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.PGPORT),
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
-  entities: [path.join(__dirname, '..', 'data', '*.entity.ts')],
+  entities: [
+    path.join(
+      __dirname,
+      '..',
+      'data',
+      '*.entity.ts',
+      path.join(__dirname, '..', 'data', '*.entity.js'),
+    ),
+  ],
   synchronize: true,
   logging: ['query', 'warn', 'error'],
 });
