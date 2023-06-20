@@ -14,7 +14,7 @@ export const findQuestions = async () => {
 export const findQuestionById = async (questionId: number) => {
   return await memberResource.findOne({
     where: { questionId },
-    relations: ['answers', 'members'],
+    relations: ['answers', 'member'],
   });
 };
 

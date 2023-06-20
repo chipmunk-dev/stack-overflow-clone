@@ -30,9 +30,9 @@ export default class Question {
     name: 'memberId',
     referencedColumnName: 'memberId',
   })
-  member!: number;
+  member!: Member;
 
-  @OneToMany(() => Answer, (answer) => answer.question)
+  @OneToMany(() => Answer, (answer) => answer.questionId)
   answers!: Answer[];
 
   @CreateDateColumn()

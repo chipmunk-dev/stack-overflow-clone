@@ -1,26 +1,28 @@
 import { Request, Response } from 'express';
+import { isEmpty } from 'lodash';
 
 import Question from '../data/Question.entity';
+import Member from '../data/Member.entity';
 import {
   findQuestionById,
   findQuestions,
   removeQuestion,
   saveQuestion,
 } from '../repository/question.repo';
-import { isEmpty } from 'lodash';
+import { findMemberById } from '../repository/member.repo';
+import { memberToMemberResponseDto } from '../mapper/memberMapper';
 
 export const createQuestion = async (request: Request, response: Response) => {
   const { memberId } = response.locals;
   const { title, content } = request.body;
 
-  const newQuestion = new Question();
-
-  newQuestion.title = title;
-  newQuestion.content = content;
-  newQuestion.member = memberId;
-  newQuestion.viewCount = 0;
-
   try {
+    const newQuestion = new Question();
+    const findMember = await findMemberById(memberId);
+
+    newQuestion.title = title;
+    newQuestion.content = content;
+    newQuestion.member = findMember as Member;
     const savedQuestion = await saveQuestion(newQuestion);
 
     return response.status(201).json(savedQuestion);
@@ -55,8 +57,13 @@ export const getQuestionOne = async (request: Request, response: Response) => {
 
   try {
     const findQuestion = await findQuestionById(parseInt(questionId));
+    const memberResponse = memberToMemberResponseDto(
+      (findQuestion as Question).member,
+    );
 
-    return response.status(200).json(findQuestion);
+    return response
+      .status(200)
+      .json({ ...findQuestion, member: { ...memberResponse } });
   } catch (error) {
     console.error(error);
     return response.status(500).json({

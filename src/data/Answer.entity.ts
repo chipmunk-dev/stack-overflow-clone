@@ -23,14 +23,14 @@ export default class Answer {
     name: 'memberId',
     referencedColumnName: 'memberId',
   })
-  member!: number;
+  memberId!: number;
 
   @ManyToOne(() => Question, (question) => question.answers)
   @JoinColumn({
     name: 'questionId',
     referencedColumnName: 'questionId',
   })
-  question!: number;
+  questionId!: number;
 
   @CreateDateColumn()
   createdAt!: Date;
