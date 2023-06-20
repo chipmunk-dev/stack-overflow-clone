@@ -1,21 +1,38 @@
-import bodyParser from "body-parser";
-import express from "express";
-import pg from "pg";
+import express from 'express';
+import cors, { CorsOptions } from 'cors';
+import morgan from 'morgan';
+import pg from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Connect to the database using the DATABASE_URL environment
 //   variable injected by Railway
-const pool = new pg.Pool();
+const pool = new pg.Pool({
+  database: process.env.PGDATABASE,
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+});
+
+const corsOption: CorsOptions = {
+  origin: ['http://localhost:5173'],
+  methods: ['GET', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
 
 const app = express();
 const port = process.env.PORT || 3333;
 
-app.use(bodyParser.json());
-app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
-app.use(bodyParser.text({ type: "text/html" }));
+app.use(express.json());
+app.use(cors(corsOption));
+app.use(morgan(process.env.MOARGAN as string));
 
-app.get("/", async (req, res) => {
-  const { rows } = await pool.query("SELECT NOW()");
-  res.send(`Hello, World! The time from the DB is ${rows[0].now}`);
+app.use('/');
+app.get('/', async (req, res) => {
+  return res.status(200).json({ success: true });
 });
 
 app.listen(port, () => {
