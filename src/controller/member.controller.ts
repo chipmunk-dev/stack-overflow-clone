@@ -106,7 +106,34 @@ export const login = async (request: Request, response: Response) => {
 
 // export const checkMember = async (request: Request, response: Response) => {};
 
-// export const update = async (request: Request, response: Response) => {};
+export const update = async (request: Request, response: Response) => {
+  const { id } = request.params;
+  const { name, email, password } = request.body;
+
+  try {
+    const findMember = await findMemberById(parseInt(id));
+
+    if (isEmpty(findMember)) {
+      return response
+        .status(400)
+        .json({ message: '존재하지 않는 회원입니다.' });
+    }
+
+    findMember.name = name;
+    findMember.email = email;
+    findMember.password = password;
+
+    const updateMember = await saveMember(findMember);
+
+    return response.status(200).json(updateMember);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({
+      message: '서버 에러가 발생했습니다. 잠시 후 다시 요청해주세요.',
+      error,
+    });
+  }
+};
 
 export const withdraw = async (request: Request, response: Response) => {
   const { id } = request.params;
