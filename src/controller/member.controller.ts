@@ -4,7 +4,12 @@ import * as jwt from 'jsonwebtoken';
 
 import Member from '../data/Member.entity';
 import { MemberStatus } from '../data/common/enum';
-import { findMemberByEmail, saveMember } from '../repository/member.repo';
+import {
+  findMemberByEmail,
+  findMemberById,
+  removeMember,
+  saveMember,
+} from '../repository/member.repo';
 import { memberToMemberResponseDto } from '../mapper/memberMapper';
 import { isEmpty } from 'lodash';
 
@@ -12,6 +17,14 @@ export const register = async (request: Request, response: Response) => {
   const { email, password: plainPassword, name } = request.body;
 
   try {
+    const findMember = await findMemberByEmail(email);
+
+    if (!isEmpty(findMember)) {
+      return response
+        .status(409)
+        .json({ message: '이미 존재하는 이메일입니다.' });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(plainPassword, salt);
     const newMember = new Member();
@@ -95,4 +108,25 @@ export const login = async (request: Request, response: Response) => {
 
 // export const update = async (request: Request, response: Response) => {};
 
-// export const withdraw = async (request: Request, response: Response) => {};
+export const withdraw = async (request: Request, response: Response) => {
+  const { id } = request.params;
+
+  try {
+    const findMember = await findMemberById(parseInt(id));
+
+    if (isEmpty(findMember)) {
+      return response.status(400).json({
+        message: '해당 멤버가 존재하지 않습니다. 멤버 아이디를 확인해 주세요',
+      });
+    }
+
+    await removeMember(findMember);
+    return response.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({
+      message: '서버 에러가 발생했습니다. 잠시 후 다시 요청해주세요.',
+      error,
+    });
+  }
+};

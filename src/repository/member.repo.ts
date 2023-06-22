@@ -14,3 +14,7 @@ export const findMemberById = async (memberId: number) => {
 export const findMemberByEmail = async (email: string) => {
   return await memberResource.findOneBy({ email });
 };
+
+export const removeMember = async (member: Member) => {
+  return await memberResource.remove(member);
+};
