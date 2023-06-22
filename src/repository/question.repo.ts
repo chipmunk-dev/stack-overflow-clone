@@ -7,8 +7,15 @@ export const saveQuestion = async (newQuestion: Question) => {
   return await memberResource.save(newQuestion);
 };
 
-export const findQuestions = async () => {
-  return await memberResource.find();
+export const findQuestions = async (pageInfo: {
+  page: number;
+  size: number;
+}) => {
+  const { page, size } = pageInfo;
+  return await memberResource.findAndCount({
+    take: size,
+    skip: (page - 1) * size,
+  });
 };
 
 export const findQuestionById = async (questionId: number) => {

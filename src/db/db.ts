@@ -8,10 +8,10 @@ import Answer from '../data/Answer.entity';
 export const AppDataSource = new DataSource({
   type: 'mysql',
   database: 'stackoverflow',
-  host: 'localhost',
+  host: '127.0.0.1',
   port: 3306,
   username: 'root',
-  password: '비밀번호 입력하세요',
+  password: '66356635',
   entities: [Member, Question, Answer],
   synchronize: true,
   logging: ['query', 'warn', 'error'],

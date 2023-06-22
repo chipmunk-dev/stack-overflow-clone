@@ -35,14 +35,23 @@ export const createQuestion = async (request: Request, response: Response) => {
   }
 };
 
-export const getQuestionList = async (
-  _request: Request,
-  response: Response,
-) => {
-  try {
-    const findQuestionList = (await findQuestions()) || [];
+export const getQuestionList = async (request: Request, response: Response) => {
+  const { page, size } = request.query;
+  const pagenation = {
+    page: page ? Number(page) : 1,
+    size: size ? Number(size) : 10,
+  };
 
-    return response.status(200).json({ data: findQuestionList });
+  try {
+    const findQuestionList = (await findQuestions(pagenation)) || [];
+    const [questions, totalElements] = findQuestionList;
+    const pageInfo = {
+      ...pagenation,
+      totalElements,
+      totalPages: Math.ceil(totalElements / pagenation.size),
+    };
+
+    return response.status(200).json({ data: questions, pageInfo: pageInfo });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
