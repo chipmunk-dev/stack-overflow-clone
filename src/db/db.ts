@@ -7,11 +7,11 @@ import Answer from '../data/Answer.entity';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  database: process.env.PGDATABASE,
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  username: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
+  database: 'stackoverflow',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: '비밀번호 입력하세요',
   entities: [Member, Question, Answer],
   synchronize: true,
   logging: ['query', 'warn', 'error'],
