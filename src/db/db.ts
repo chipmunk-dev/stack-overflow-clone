@@ -6,7 +6,7 @@ import Question from '../data/Question.entity';
 import Answer from '../data/Answer.entity';
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
+  type: 'mysql',
   database: process.env.PGDATABASE,
   host: process.env.PGHOST,
   port: Number(process.env.PGPORT),
