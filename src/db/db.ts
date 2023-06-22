@@ -5,13 +5,15 @@ import Member from '../data/Member.entity';
 import Question from '../data/Question.entity';
 import Answer from '../data/Answer.entity';
 
+const { PGDATABASE, PGHOST, PGPORT, PGUSER, PGPASSWORD } = process.env;
+
 export const AppDataSource = new DataSource({
-  type: 'mysql',
-  database: 'stackoverflow',
-  host: '127.0.0.1',
-  port: 3306,
-  username: 'root',
-  password: '66356635',
+  type: 'postgres',
+  database: PGDATABASE,
+  host: PGHOST,
+  port: Number(PGPORT),
+  username: PGUSER,
+  password: PGPASSWORD,
   entities: [Member, Question, Answer],
   synchronize: true,
   logging: ['query', 'warn', 'error'],
