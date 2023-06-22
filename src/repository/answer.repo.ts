@@ -7,8 +7,12 @@ export const saveAnswer = async (newAnswer: Answer) => {
   return await answerResource.save(newAnswer);
 };
 
-export const findAnswers = async () => {
-  return await answerResource.find();
+export const findAnswers = async (pageInfo: { page: number; size: number }) => {
+  const { page, size } = pageInfo;
+  return await answerResource.findAndCount({
+    take: size,
+    skip: (page - 1) * size,
+  });
 };
 
 export const findAnswerById = async (answerId: number) => {

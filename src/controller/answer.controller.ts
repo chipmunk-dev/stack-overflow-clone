@@ -37,11 +37,23 @@ export const createAnswer = async (request: Request, response: Response) => {
   }
 };
 
-export const getAnswerList = async (_request: Request, response: Response) => {
-  try {
-    const answerList = (await findAnswers()) || [];
+export const getAnswerList = async (request: Request, response: Response) => {
+  const { page, size } = request.query;
+  const pagenation = {
+    page: page ? Number(page) : 1,
+    size: size ? Number(size) : 10,
+  };
 
-    return response.status(200).json({ data: answerList });
+  try {
+    const answerList = (await findAnswers(pagenation)) || [];
+    const [answers, totalElements] = answerList;
+    const pageInfo = {
+      ...pagenation,
+      totalElements,
+      totalPages: Math.ceil(totalElements / pagenation.size),
+    };
+
+    return response.status(200).json({ data: answers, pageInfo });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
