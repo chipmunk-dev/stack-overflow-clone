@@ -64,10 +64,10 @@ export const login = async (request: Request, response: Response) => {
   try {
     const findMember = await findMemberByEmail(id);
 
-    if (isEmpty(findMember)) {
+    if (isEmpty(findMember) || !findMember) {
       return response
         .status(400)
-        .json({ message: '이메일 또는 비밀번호가 일치하지 않습니다.' });
+        .json({ message: '존재하지 않는 이메일 입니다.' });
     }
 
     const isMatch = await bcrypt.compare(password, findMember.password);
@@ -75,7 +75,7 @@ export const login = async (request: Request, response: Response) => {
     if (!isMatch) {
       return response
         .status(400)
-        .json({ message: '이메일 또는 비밀번호가 일치하지 않습니다.' });
+        .json({ message: '비밀번호가 일치하지 않습니다.' });
     }
 
     const responseMemberData = memberToMemberResponseDto(findMember);
