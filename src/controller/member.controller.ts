@@ -59,10 +59,10 @@ export const register = async (request: Request, response: Response) => {
 };
 
 export const login = async (request: Request, response: Response) => {
-  const { email, password } = request.body;
+  const { id, password } = request.body;
 
   try {
-    const findMember = await findMemberByEmail(email);
+    const findMember = await findMemberByEmail(id);
 
     if (isEmpty(findMember)) {
       return response
