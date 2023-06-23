@@ -70,7 +70,7 @@ export const login = async (request: Request, response: Response) => {
         .json({ message: '이메일 또는 비밀번호가 일치하지 않습니다.' });
     }
 
-    const isMatch = bcrypt.compare(password, findMember.password);
+    const isMatch = await bcrypt.compare(password, findMember.password);
 
     if (!isMatch) {
       return response
