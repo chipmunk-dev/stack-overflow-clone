@@ -7,12 +7,18 @@ export const saveMember = async (newMember: Member) => {
   return await memberResource.save(newMember);
 };
 
-export const findMemberById = async (memberId: number) => {
-  return await memberResource.findOneBy({ memberId });
+export const findMemberById = async (
+  memberId: number,
+  relations?: string[],
+) => {
+  return await memberResource.findOne({ where: { memberId }, relations });
 };
 
-export const findMemberByEmail = async (email: string) => {
-  return await memberResource.findOneBy({ email });
+export const findMemberByEmail = async (
+  email: string,
+  relations?: string[],
+) => {
+  return await memberResource.findOne({ where: { email }, relations });
 };
 
 export const removeMember = async (member: Member) => {

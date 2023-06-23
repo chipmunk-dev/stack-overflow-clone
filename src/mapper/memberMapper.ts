@@ -1,7 +1,8 @@
 import Member from '../data/Member.entity';
 
 export const memberToMemberResponseDto = (member: Member) => {
-  const { memberId, name, email, createdAt, modifiedAt } = member;
+  const data: Partial<Member> = { ...member };
+  delete data['password'];
 
-  return { memberId, name, email, createdAt, modifiedAt };
+  return data;
 };
