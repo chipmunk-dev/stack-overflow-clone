@@ -11,7 +11,7 @@ const route = express.Router();
 
 route.post('/', auth, createAnswer);
 route.get('/', getAnswerList);
-route.patch('/', auth, updateAnswer);
-route.delete('/', auth, deleteAnswer);
+route.patch('/:answerId', auth, updateAnswer);
+route.delete('/:answerId', auth, deleteAnswer);
 
 export default route;

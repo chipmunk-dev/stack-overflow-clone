@@ -71,12 +71,12 @@ export const updateAnswer = async (request: Request, response: Response) => {
     const findAnswer = (await findAnswerById(parseInt(answerId))) as Answer;
     findAnswer.content = content;
 
-    const updateAnswer = await saveAnswer(findAnswer);
-    const responseMember = memberToMemberResponseDto(updateAnswer.member);
+    const updateAnswers = await saveAnswer(findAnswer);
+    const responseMember = memberToMemberResponseDto(updateAnswers.member);
 
     return response
       .status(200)
-      .json({ ...updateAnswer, member: { ...responseMember } });
+      .json({ ...updateAnswers, member: { ...responseMember } });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
