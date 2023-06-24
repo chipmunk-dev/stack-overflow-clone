@@ -23,9 +23,10 @@ export const createQuestion = async (request: Request, response: Response) => {
     newQuestion.title = title;
     newQuestion.content = content;
     newQuestion.member = findMember as Member;
-    const savedQuestion = await saveQuestion(newQuestion);
+    const { questionId } = await saveQuestion(newQuestion);
+    response.setHeader('location', `questions/${questionId}`);
 
-    return response.status(201).json(savedQuestion);
+    return response.sendStatus(201);
   } catch (error) {
     console.error(error);
     return response.status(500).json({

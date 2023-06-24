@@ -19,7 +19,7 @@ const corsOption: CorsOptions = {
   origin: [process.env.ORIGIN as string],
   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization'],
+  exposedHeaders: ['Authorization', 'location'],
   credentials: true,
 };
 
