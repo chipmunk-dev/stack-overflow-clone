@@ -73,7 +73,7 @@ export const login = async (request: Request, response: Response) => {
       process.env.ACCESS_KEY as string,
     );
 
-    response.header({ Authorization: accessToken });
+    response.setHeader('Authorization', accessToken);
 
     return response.sendStatus(200);
   } catch (error) {
