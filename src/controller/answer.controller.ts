@@ -11,6 +11,7 @@ import {
   saveAnswer,
 } from '../repository/answer.repo';
 import { memberToMemberResponseDto } from '../mapper/memberMapper';
+import { isEmpty } from 'lodash';
 
 export const createAnswer = async (request: Request, response: Response) => {
   const { memberId } = response.locals;
@@ -54,6 +55,31 @@ export const getAnswerList = async (request: Request, response: Response) => {
     };
 
     return response.status(200).json({ data: answers, pageInfo });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({
+      message: '서버 에러가 발생했습니다. 잠시 후 다시 요청해주세요.',
+      error,
+    });
+  }
+};
+
+export const getAnswer = async (request: Request, response: Response) => {
+  const { answerId } = request.params;
+
+  try {
+    const answer = await findAnswerById(parseInt(answerId));
+
+    if (isEmpty(answer)) {
+      return response
+        .status(400)
+        .json({ message: '유효하지 않은 answerId입니다.' });
+    }
+
+    const responseMemberDto = memberToMemberResponseDto(answer.member);
+    return response
+      .status(200)
+      .json({ ...answer, member: { ...responseMemberDto } });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
