@@ -10,8 +10,10 @@ export const auth = async (
   response: Response,
   next: NextFunction,
 ) => {
-  const authorization = request.headers.authorization;
-  const accessToken = authorization?.split('Bearer ')[1];
+  const authorization = request.headers['Authorization'];
+  const accessToken = (authorization as undefined | string)?.split(
+    'Bearer ',
+  )[1];
 
   if (!accessToken) {
     return response.status(401).json({ message: 'token이 없습니다.' });

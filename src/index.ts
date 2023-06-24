@@ -23,7 +23,7 @@ const corsOption: CorsOptions = {
 };
 
 const app = express();
-const port = process.env.PORT || 3333;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cors(corsOption));

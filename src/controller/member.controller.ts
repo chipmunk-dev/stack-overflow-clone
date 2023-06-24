@@ -33,22 +33,9 @@ export const register = async (request: Request, response: Response) => {
     newMember.name = name;
     newMember.status = MemberStatus.MEMBER_ACTIVE;
 
-    const savedMember = await saveMember(newMember);
-    const responseMemberData = memberToMemberResponseDto(savedMember);
+    await saveMember(newMember);
 
-    // Token 생성
-    const accessToken = jwt.sign(
-      responseMemberData,
-      process.env.ACCESS_KEY as string,
-    );
-    const refreshToken = jwt.sign(
-      { memberId: responseMemberData.memberId },
-      process.env.REFRESH_KEY as string,
-    );
-
-    return response
-      .status(201)
-      .json({ member: responseMemberData, accessToken, refreshToken });
+    return response.sendStatus(201);
   } catch (error) {
     console.error(error);
     return response.status(500).json({
@@ -85,16 +72,10 @@ export const login = async (request: Request, response: Response) => {
       responseMemberData,
       process.env.ACCESS_KEY as string,
     );
-    const refreshToken = jwt.sign(
-      { memberId: responseMemberData.memberId },
-      process.env.REFRESH_KEY as string,
-    );
 
-    response.cookie('authorization', accessToken);
+    response.header({ Authorization: accessToken });
 
-    return response
-      .status(200)
-      .json({ member: responseMemberData, accessToken, refreshToken });
+    return response.sendStatus(200);
   } catch (error) {
     console.error(error);
     return response.status(500).json({
