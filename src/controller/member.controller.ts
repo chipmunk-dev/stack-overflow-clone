@@ -75,7 +75,12 @@ export const login = async (request: Request, response: Response) => {
 
     response.setHeader('Authorization', `Bearer ${accessToken}`);
 
-    return response.sendStatus(200);
+    return response
+      .status(200)
+      .json({
+        memberId: responseMemberData.memberId,
+        email: responseMemberData.email,
+      });
   } catch (error) {
     console.error(error);
     return response.status(500).json({
